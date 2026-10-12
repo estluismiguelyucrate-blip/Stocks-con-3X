@@ -1,4 +1,4 @@
-# PR2-2026-STOXX
+# Stocks con 3X
 
 Aplicación web académica para registrar ventas, controlar inventario y consultar cierres de caja de un pequeño comercio.
 
