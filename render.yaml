@@ -9,8 +9,6 @@ services:
     envVars:
       - key: STOXX_DATA_DIR
         value: /var/data
-      - key: STOXX_INITIAL_SETUP_KEY
-        sync: false
     disk:
       name: stocks-con-3x-data
       mountPath: /var/data

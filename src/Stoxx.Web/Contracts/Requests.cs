@@ -1,6 +1,6 @@
 namespace Stoxx.Web.Contracts;
 
-public sealed record SetupRequest(string Name, string UserName, string Password, string? SetupKey);
+public sealed record SetupRequest(string Name, string UserName, string Password);
 public sealed record LoginRequest(string UserName, string Password);
 public sealed record CreateUserRequest(string Name, string UserName, string Password, string Role);
 public sealed record ProductRequest(string Code, string Name, string Category, decimal CostPrice, decimal UnitPrice, int Stock, int MinimumStock);

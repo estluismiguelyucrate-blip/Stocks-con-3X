@@ -41,7 +41,7 @@ Abre [http://localhost:5080](http://localhost:5080). En el primer inicio, crea l
 
 El administrador puede crear cuentas de cajero y de inventario desde **Usuarios**. La aplicación no trae usuarios, contraseñas ni productos precargados.
 
-En producción, la primera cuenta administradora solo se puede crear con la clave definida en `STOXX_INITIAL_SETUP_KEY` (mínimo 32 caracteres). Configúrala como secreto privado en el servicio de alojamiento antes de publicar la app y compártela únicamente con quien deba crear esa primera cuenta. En modo Desarrollo local, la clave no se solicita. Después de crear la primera cuenta, las cuentas adicionales se crean desde **Usuarios** por un administrador.
+La primera cuenta administradora se crea una sola vez mientras la base de datos esté vacía. Después, el administrador puede autorizar nuevas cuentas desde **Usuarios**.
 
 ## Acceso desde celulares y otras computadoras
 
@@ -49,11 +49,11 @@ El enlace `http://localhost:5080` solo abre la aplicación en la misma laptop do
 
 La interfaz se adapta a pantallas de celulares y computadoras. El sitio está disponible desde cualquier dispositivo conectado a Internet en [Stocks X X X](https://stocks-con-3x.onrender.com). Para usar sus funciones, inicia sesión con la cuenta administradora o con una cuenta que ella haya creado.
 
-En producción, la primera cuenta administradora se crea con el secreto `STOXX_INITIAL_SETUP_KEY` configurado en Render. Después, el administrador puede crear las cuentas del resto del equipo.
+En la primera visita, cualquier persona puede registrar la primera cuenta administradora si la base de datos sigue vacía. Después, el acceso requiere una cuenta creada por la administradora o el administrador.
 
 ## Despliegue en Render con datos persistentes
 
-El repositorio incluye `Dockerfile` y `render.yaml` para desplegar la aplicación en Render. La configuración usa el disco persistente `/var/data` para SQLite y las claves de sesión. `STOXX_INITIAL_SETUP_KEY` debe mantenerse como secreto privado de Render y tener al menos 32 caracteres. El enlace público permite abrir la aplicación; para usarla, cada persona necesita una cuenta creada por el administrador.
+El repositorio incluye `Dockerfile` y `render.yaml` para desplegar la aplicación en Render. La configuración usa el disco persistente `/var/data` para SQLite y las claves de sesión. El enlace público permite abrir la aplicación; para usar sus funciones, cada persona necesita una cuenta creada por el administrador.
 
 El plan gratuito de Render no conserva el archivo SQLite. Consulta el costo vigente del plan y del disco persistente antes de desplegar.
 
