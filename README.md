@@ -47,13 +47,13 @@ En producción, la primera cuenta administradora solo se puede crear con la clav
 
 El enlace `http://localhost:5080` solo abre la aplicación en la misma laptop donde se está ejecutando. Si se abre ese enlace desde un celular, `localhost` apunta al propio celular, no a la laptop.
 
-La interfaz se adapta a pantallas de celulares y computadoras. Sin embargo, para que otro dispositivo entre, la aplicación debe estar configurada para aceptar conexiones desde la red local y ambos dispositivos deben estar en la misma red. Para entrar desde Internet se necesita publicar la aplicación en un servicio de alojamiento. **Esta versión todavía no está publicada para acceso público.**
+La interfaz se adapta a pantallas de celulares y computadoras. El sitio está disponible desde cualquier dispositivo conectado a Internet en [Stocks X X X](https://stocks-con-3x.onrender.com). Para usar sus funciones, inicia sesión con la cuenta administradora o con una cuenta que ella haya creado.
 
-Antes de publicar el sistema, configura `STOXX_INITIAL_SETUP_KEY` en el servicio de alojamiento. En producción, solo quien tenga esa clave podrá crear la primera cuenta administradora.
+En producción, la primera cuenta administradora se crea con el secreto `STOXX_INITIAL_SETUP_KEY` configurado en Render. Después, el administrador puede crear las cuentas del resto del equipo.
 
-## Publicar en Render con datos persistentes
+## Despliegue en Render con datos persistentes
 
-El repositorio incluye `Dockerfile` y `render.yaml` como base para desplegar la aplicación en Render. La configuración usa el disco persistente `/var/data` para SQLite y las claves de sesión. Antes de crear el servicio, configura `STOXX_INITIAL_SETUP_KEY` como secreto privado en Render con al menos 32 caracteres. Después del primer inicio, comparte ese código solo con quien vaya a crear la cuenta administradora. El enlace público permite abrir la aplicación; para usarla, cada persona necesita una cuenta creada por el administrador.
+El repositorio incluye `Dockerfile` y `render.yaml` para desplegar la aplicación en Render. La configuración usa el disco persistente `/var/data` para SQLite y las claves de sesión. `STOXX_INITIAL_SETUP_KEY` debe mantenerse como secreto privado de Render y tener al menos 32 caracteres. El enlace público permite abrir la aplicación; para usarla, cada persona necesita una cuenta creada por el administrador.
 
 El plan gratuito de Render no conserva el archivo SQLite. Consulta el costo vigente del plan y del disco persistente antes de desplegar.
 
