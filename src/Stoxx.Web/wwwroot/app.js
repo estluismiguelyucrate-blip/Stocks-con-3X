@@ -45,13 +45,16 @@ function showAuth(message = '') {
   if (message) showFormMessage($('#auth-alert'), message);
 }
 
-function setAuthMode(setupRequired) {
+function setAuthMode(setupRequired, setupAuthorizationRequired = false) {
   $('#auth-title').textContent = setupRequired ? 'Configura el acceso' : 'Iniciar sesión';
   $('#auth-description').textContent = setupRequired
     ? 'Crea la primera cuenta. Tendrá permisos de administrador.'
     : 'Ingresa con tu cuenta para administrar la tienda.';
   $('#setup-form').classList.toggle('hidden', !setupRequired);
   $('#login-form').classList.toggle('hidden', setupRequired);
+  const setupKeyInput = $('#setup-form [name="setupKey"]');
+  $('#setup-key-label').classList.toggle('hidden', !setupAuthorizationRequired);
+  setupKeyInput.required = setupAuthorizationRequired;
 }
 
 async function initialize() {
@@ -62,7 +65,7 @@ async function initialize() {
       await enterApp();
     } else {
       showAuth();
-      setAuthMode(status.setupRequired);
+      setAuthMode(status.setupRequired, status.setupAuthorizationRequired);
     }
   } catch (error) {
     showAuth(error.message);

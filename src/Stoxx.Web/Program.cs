@@ -1,4 +1,6 @@
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
@@ -60,6 +62,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
+var setupAuthorizationRequired = !app.Environment.IsDevelopment();
+var setupAuthorizationKey = app.Configuration["STOXX_INITIAL_SETUP_KEY"];
 
 app.UseExceptionHandler(handler => handler.Run(async context =>
 {
@@ -88,6 +92,7 @@ app.MapGet("/api/auth/status", async (AppDbContext db, ClaimsPrincipal user) =>
     return Results.Ok(new
     {
         setupRequired,
+        setupAuthorizationRequired,
         authenticated = user.Identity?.IsAuthenticated == true,
         user = user.Identity?.IsAuthenticated == true
             ? new { name = user.Identity.Name, role = user.FindFirstValue(ClaimTypes.Role) }
@@ -100,6 +105,17 @@ app.MapPost("/api/auth/setup", async (
     AppDbContext db,
     IPasswordHasher<AppUser> hasher) =>
 {
+    if (setupAuthorizationRequired)
+    {
+        if (string.IsNullOrEmpty(setupAuthorizationKey))
+            return Results.Problem("La autorización inicial no está configurada.", statusCode: StatusCodes.Status503ServiceUnavailable);
+
+        var providedKey = Encoding.UTF8.GetBytes(request.SetupKey ?? string.Empty);
+        var configuredKey = Encoding.UTF8.GetBytes(setupAuthorizationKey);
+        if (!CryptographicOperations.FixedTimeEquals(providedKey, configuredKey))
+            return Results.Json(new { message = "El código de autorización inicial no es válido." }, statusCode: StatusCodes.Status403Forbidden);
+    }
+
     var validation = ValidateCredentials(request.Name, request.UserName, request.Password);
     if (validation is not null) return Results.BadRequest(new { message = validation });
     if (await db.Users.AnyAsync()) return Results.Conflict(new { message = "La configuración inicial ya se completó." });

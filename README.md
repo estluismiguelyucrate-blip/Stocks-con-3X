@@ -41,6 +41,8 @@ Abre [http://localhost:5080](http://localhost:5080). En el primer inicio, crea l
 
 El administrador puede crear cuentas de cajero y de inventario desde **Usuarios**. La aplicación no trae usuarios, contraseñas ni productos precargados.
 
+En producción, la primera cuenta administradora solo se puede crear con la clave definida en la variable de entorno `STOXX_INITIAL_SETUP_KEY`. Configúrala como secreto privado en el servicio de alojamiento antes de publicar la app y compártela únicamente con quien deba crear esa primera cuenta. En modo Desarrollo local, la clave no se solicita. Después de crear la primera cuenta, las cuentas adicionales se crean desde **Usuarios** por un administrador.
+
 ## Acceso desde celulares y otras computadoras
 
 El enlace `http://localhost:5080` solo abre la aplicación en la misma laptop donde se está ejecutando. Si se abre ese enlace desde un celular, `localhost` apunta al propio celular, no a la laptop.
