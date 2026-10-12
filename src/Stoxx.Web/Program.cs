@@ -13,7 +13,9 @@ using Stoxx.Web.Data;
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
-var dataDirectory = Path.Combine(builder.Environment.ContentRootPath, "data");
+var dataDirectory = builder.Configuration["STOXX_DATA_DIR"];
+if (string.IsNullOrWhiteSpace(dataDirectory))
+    dataDirectory = Path.Combine(builder.Environment.ContentRootPath, "data");
 Directory.CreateDirectory(dataDirectory);
 var keyDirectory = Path.Combine(dataDirectory, "keys");
 Directory.CreateDirectory(keyDirectory);
@@ -107,7 +109,7 @@ app.MapPost("/api/auth/setup", async (
 {
     if (setupAuthorizationRequired)
     {
-        if (string.IsNullOrEmpty(setupAuthorizationKey))
+        if (string.IsNullOrEmpty(setupAuthorizationKey) || setupAuthorizationKey.Length < 32)
             return Results.Problem("La autorización inicial no está configurada.", statusCode: StatusCodes.Status503ServiceUnavailable);
 
         var providedKey = Encoding.UTF8.GetBytes(request.SetupKey ?? string.Empty);

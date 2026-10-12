@@ -48,7 +48,9 @@ function showAuth(message = '') {
 function setAuthMode(setupRequired, setupAuthorizationRequired = false) {
   $('#auth-title').textContent = setupRequired ? 'Configura el acceso' : 'Iniciar sesión';
   $('#auth-description').textContent = setupRequired
-    ? 'Crea la primera cuenta. Tendrá permisos de administrador.'
+    ? (setupAuthorizationRequired
+      ? 'La primera cuenta requiere la clave de autorización del propietario.'
+      : 'Crea la primera cuenta. Tendrá permisos de administrador.')
     : 'Ingresa con tu cuenta para administrar la tienda.';
   $('#setup-form').classList.toggle('hidden', !setupRequired);
   $('#login-form').classList.toggle('hidden', setupRequired);
